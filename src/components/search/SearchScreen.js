@@ -1,11 +1,17 @@
 import React from "react";
+import { getHeroesByName } from "../../helpers/getHeroesByName";
 import { useForm } from "../../hooks/useForm";
+import HeroCard from "../hero/HeroCard";
 
 const SearchScreen = () => {
-  const [{searchText}, handleInputChange, reset] = useForm({ searchText: "" });
+  const [{ searchText }, handleInputChange, reset] = useForm({
+    searchText: "",
+  });
+
+  const heroesFilter = getHeroesByName();
+
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(searchText);
     reset();
   };
 
@@ -25,13 +31,18 @@ const SearchScreen = () => {
               onChange={handleInputChange}
             />
 
-            <button
-              type="submit"
-              className="btn btn-outline-primary mt-1"
-            >
+            <button type="submit" className="btn btn-outline-primary mt-1">
               Search
             </button>
           </form>
+        </div>
+
+        <div className="col-7">
+          <h4>Results</h4>
+          <hr />
+          {heroesFilter.map((hero) => (
+            <HeroCard key={hero.id} {...hero} />
+          ))}
         </div>
       </div>
     </>
