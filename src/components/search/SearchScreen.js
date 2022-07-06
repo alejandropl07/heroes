@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useMemo } from "react";
+import queryString from "query-string";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getHeroesByName } from "../../helpers/getHeroesByName";
 import { useForm } from "../../hooks/useForm";
 import HeroCard from "../hero/HeroCard";
 
 const SearchScreen = () => {
-  const [{ searchText }, handleInputChange, reset] = useForm({
-    searchText: "",
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { q = "" } = queryString.parse(location.search);
+
+  const [{ searchText }, handleInputChange] = useForm({
+    searchText: q,
   });
 
-  const heroesFilter = getHeroesByName();
+  const heroesFilter = useMemo(() => getHeroesByName(q), [q]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    reset();
+    navigate(`?q=${searchText}`);
   };
 
   return (
@@ -40,7 +47,10 @@ const SearchScreen = () => {
         <div className="col-7">
           <h4>Results</h4>
           <hr />
-          {heroesFilter.map((hero) => (
+          {q.length > 0 && heroesFilter.length === 0 && (
+            <div className="alert alert-danger">No results</div>
+          )}
+          {heroesFilter?.map((hero) => (
             <HeroCard key={hero.id} {...hero} />
           ))}
         </div>
