@@ -1,10 +1,5 @@
 import { types } from "../types";
 
-const state = {
-  // username: 'Alejandro',
-  // logged: false,
-};
-
 export const authReducer = (state = {}, action) => {
   switch (action.type) {
     case types.login:
