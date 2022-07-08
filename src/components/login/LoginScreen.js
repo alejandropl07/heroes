@@ -14,7 +14,8 @@ const LoginScreen = () => {
         username: "Alejandro",
       },
     });
-    navigate("/", {
+    const lastPath = localStorage.getItem("lastPath") || "/marvel";
+    navigate(lastPath, {
       replace: true,
     });
   };
